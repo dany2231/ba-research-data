@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="블루 아카이브 콜라보와 피규어 출시 흐름을 비교하는 데이터 아틀라스">
+  <title>블루 아카이브 데이터 아틀라스</title>
+  <link rel="stylesheet" href="atlas-layout.css">
+  <style>
+    :root{--ink:#12213d;--muted:#647089;--line:#dce4f0;--soft:#f5f8fc;--blue:#347fdb;--shadow:0 8px 24px rgba(28,54,90,.08)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{overflow:hidden;color:var(--ink);background:#fff;font-family:Inter,"Pretendard","Noto Sans KR",system-ui,sans-serif}
+    header{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:22px;min-height:84px;padding:14px clamp(16px,3vw,42px);border-bottom:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+    .brand{min-width:250px}
+    h1{margin:0 0 4px;font-size:clamp(18px,2vw,27px);letter-spacing:-.035em}
+    p{margin:0;color:var(--muted);font-size:11px}
+    nav{display:flex;gap:7px;padding:5px;background:var(--soft);border-radius:12px}
+    button{font:inherit;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;background:transparent;border:0;border-radius:8px;padding:10px 14px;cursor:pointer}
+    button:hover{color:var(--ink);background:#fff}
+    button.active{color:#fff;background:var(--ink);box-shadow:0 4px 12px rgba(18,33,61,.18)}
+    iframe{display:block;width:100%;height:calc(100vh - 84px);border:0;background:#fff}
+    @media(max-width:760px){body{overflow:auto}header{position:sticky;top:0;align-items:flex-start;flex-direction:column;gap:10px;padding:13px 14px}.brand{min-width:0}nav{display:grid;grid-template-columns:1fr 1fr;width:100%;overflow:visible}button{width:100%;padding:9px 8px}iframe{height:calc(100vh - 172px);min-height:660px}}
+    @media(prefers-reduced-motion:no-preference){iframe{animation:fade .2s ease}@keyframes fade{from{opacity:.65}to{opacity:1}}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>블루 아카이브 데이터 아틀라스</h1>
+      <p id="viewDescription">오프라인과 공공기관 콜라보 흐름</p>
+    </div>
+    <nav aria-label="대시보드 선택">
+      <button type="button" data-view="offline">오프라인과 공공</button>
+      <button type="button" data-view="retail">리테일과 F&amp;B</button>
+      <button type="button" data-view="figure">피규어</button>
+      <button type="button" data-view="goods">굿즈 추이</button>
+      <button type="button" data-view="catalog">굿즈 카탈로그</button>
+    </nav>
+  </header>
+  <iframe id="dashboard" title="블루 아카이브 데이터 대시보드"></iframe>
+  <script>
+    const views={
+      offline:{src:'blue-archive-collaboration-atlas.html?view=offline',description:'오프라인과 공공기관 콜라보 흐름'},
+      retail:{src:'blue-archive-collaboration-atlas.html?view=retail',description:'리테일과 F&B 콜라보 흐름'},
+      figure:{src:'blue-archive-figure-atlas.html',description:'피규어 카테고리별 출시 흐름'},
+      goods:{src:'blue-archive-goods-trend.html',description:'Yostar와 Animate 굿즈 카테고리별 발매 흐름'},
+      catalog:{src:'goods-catalog.html',description:'Yostar와 Animate 굿즈 통합 카탈로그'}
+    };
+    const frame=document.querySelector('#dashboard'),description=document.querySelector('#viewDescription');
+    function selectView(key,updateHash=true){
+      if(!views[key])key='offline';
+      document.querySelectorAll('[data-view]').forEach(button=>{const on=button.dataset.view===key;button.classList.toggle('active',on);button.setAttribute('aria-current',on?'page':'false')});
+      description.textContent=views[key].description;
+      if(!frame.src.endsWith(views[key].src))frame.src=views[key].src;
+      if(updateHash&&location.hash!==`#${key}`)history.replaceState(null,'',`#${key}`);
+    }
+    document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>selectView(button.dataset.view)));
+    addEventListener('hashchange',()=>selectView(location.hash.slice(1),false));
+    selectView(location.hash.slice(1)||'offline',false);
+  </script>
+</body>
+</html>

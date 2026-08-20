@@ -1,0 +1,16 @@
+html,body{max-width:100%;overflow-x:hidden}
+.wrap{max-width:none!important;padding-left:12px!important;padding-right:12px!important}
+header{padding-left:14px!important;padding-right:14px!important}
+.chart,.chart.monthly{min-width:0!important;height:430px!important}
+.chart-scroll,.scroll{overflow:visible!important}
+.barcol,.col,.xlabel,.x span{min-width:0!important}
+.plot,.x,.xlabels{gap:5px!important}
+.mark b,.annomark b{top:4px!important}
+.mark.event-fes b,.annomark.event-fes b{top:22px!important}
+.mark.event-live b,.annomark.event-live b{top:40px!important}
+.mark.event-anime b,.annomark.event-anime b{top:58px!important}
+.mark.event-story b,.annomark.event-story b{top:76px!important}
+.mark.event-game b,.annomark.event-game b{top:94px!important}
+.event-heat-scroll{overflow-x:auto}.event-heat{width:100%;min-width:1180px;border-collapse:separate;border-spacing:4px;font-size:11px}.event-heat th{position:sticky;top:0;background:#edf2f7;color:var(--ink);padding:8px 5px;border-radius:6px;z-index:1}.event-heat td{text-align:center;padding:7px 5px;border-radius:6px;background:#f3f6f9}.event-heat .event-name{text-align:left;font-weight:700;min-width:190px}.event-heat th:nth-child(2){min-width:110px}.event-heat th:nth-child(3){min-width:190px}.heat-number{font-weight:800}.market-badge{display:inline-block;color:#fff;font-size:9px;font-weight:800;padding:4px 6px;border-radius:4px}.market-badge.jp{background:#4169b1}.market-badge.kr{background:#af4d76}.market-badge.both{background:#6d5bb6}.market-filter{display:flex;gap:7px}.market-filter button{font:inherit;font-size:11px;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer}.market-filter button.on{color:#fff;background:var(--ink);border-color:var(--ink)}
+.event-heat-scroll{max-height:none;overflow:visible}.market-badge.yostar{background:#347fdb}.market-badge.animate{background:#e15f91}.market-badge.unmapped{background:#7b8798}
+@media(max-width:900px){.wrap{padding-left:8px!important;padding-right:8px!important}.chart,.chart.monthly{height:390px!important}.plot,.x,.xlabels{gap:3px!important}.chart.monthly .xlabel,.chart.monthly .x span{font-size:7px!important}}

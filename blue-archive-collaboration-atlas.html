@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blue Archive Collaboration Atlas</title>
+<link rel="stylesheet" href="atlas-layout.css">
+<script src="atlas-events.js"></script>
+<style>
+:root{--ink:#12213d;--muted:#647089;--line:#dce4f0;--soft:#f5f8fc;--blue:#318ce7;--coral:#ff7167;--violet:#8b66db;--gold:#f5aa17;--shadow:0 12px 32px rgba(28,54,90,.08)}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:Inter,"Pretendard","Noto Sans KR",system-ui,sans-serif}.wrap{max-width:1500px;margin:auto;padding:28px 28px 44px}header{display:flex;gap:28px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}h1{font-size:clamp(29px,3.5vw,49px);line-height:1;margin:0 0 10px;letter-spacing:-.035em}.lead{margin:0;color:var(--muted);font-size:15px}.stats{display:flex;gap:12px}.stat{min-width:142px;padding:14px 16px;border:1px solid var(--line);border-top:3px solid var(--c);border-radius:12px}.stat b{display:block;font-size:27px;color:var(--c)}.stat span{font-size:12px;color:var(--muted)}section{border:1px solid var(--line);border-radius:14px;padding:20px;background:#fff;box-shadow:var(--shadow);margin-top:16px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.section-head h2{font-size:20px;margin:0;letter-spacing:-.02em}.section-head p{margin:5px 0 0;color:var(--muted);font-size:12px}.legend,.filters{display:flex;gap:8px;flex-wrap:wrap}.legend button,.filters button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;color:var(--ink);font:inherit;font-size:12px;cursor:pointer}.legend i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px}.legend button.off{opacity:.35}.chart-scroll{overflow-x:auto;padding-bottom:3px}.chart{height:345px;min-width:1040px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:1fr 42px}.yaxis{display:flex;flex-direction:column;justify-content:space-between;color:var(--muted);font-size:11px;padding:4px 8px 1px 0;text-align:right}.plot{position:relative;display:flex;align-items:flex-end;gap:10px;border-left:1px solid #bac6d8;border-bottom:1px solid #bac6d8;background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(25% - 1px),#e7edf5 calc(25% - 1px),#e7edf5 25%)}.barcol{height:100%;flex:1;display:flex;align-items:flex-end;position:relative;min-width:33px}.bar{width:100%;display:flex;flex-direction:column-reverse;border-radius:5px 5px 0 0;overflow:hidden;transition:.25s;box-shadow:0 2px 7px rgba(30,50,90,.12)}.seg{width:100%;transition:.2s}.barcol:hover .bar{filter:saturate(1.15);transform:translateY(-2px)}.total{position:absolute;width:100%;text-align:center;font-weight:700;font-size:11px}.xlabels{grid-column:2;display:flex;gap:10px}.xlabel{flex:1;min-width:33px;text-align:center;font-size:10px;color:var(--muted);padding-top:7px;line-height:1.25}.lower{display:grid;grid-template-columns:minmax(520px,1fr) minmax(430px,1fr);gap:16px}.heat-wrap{overflow-x:auto}.heat{display:grid;grid-template-columns:125px repeat(6,minmax(54px,1fr));gap:3px;min-width:500px;font-size:12px}.heat .cell{min-height:35px;display:flex;align-items:center;justify-content:center;border-radius:4px}.heat .lab{justify-content:flex-start;font-weight:600}.heat .year{font-weight:700}.heat .value{color:#10213c;font-weight:700;cursor:default}.heat .value:hover{outline:2px solid var(--blue);z-index:1}.scale{display:flex;align-items:center;gap:8px;margin-top:15px;font-size:10px;color:var(--muted)}.scale b{height:8px;flex:1;background:linear-gradient(90deg,#eff5ff,#1767ca);border-radius:9px}.timeline{max-height:484px;overflow:auto;padding-right:5px}.tlrow{display:grid;grid-template-columns:75px 12px 1fr;gap:12px;position:relative;padding:0 0 17px}.tlrow:before{content:"";position:absolute;left:80px;top:11px;bottom:-2px;width:1px;background:#c9d6e8}.tlrow:last-child:before{display:none}.date{font-weight:700;color:var(--blue);font-size:12px}.dot{width:10px;height:10px;border-radius:50%;background:var(--c);margin-top:3px;z-index:1}.event b{font-size:13px}.event span{display:block;margin-top:3px;font-size:11px;color:var(--muted)}.exceptions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.ex{border:1px solid var(--line);border-left:4px solid var(--c);padding:14px;border-radius:9px}.ex small{color:var(--c);font-weight:800}.ex b{display:block;margin:5px 0;font-size:13px}.ex p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}.foot{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:16px}.tooltip{position:fixed;pointer-events:none;background:#12213d;color:#fff;padding:9px 11px;border-radius:8px;font-size:11px;line-height:1.45;opacity:0;transform:translate(10px,-110%);z-index:20;max-width:260px;box-shadow:var(--shadow)}@media(max-width:950px){header{align-items:flex-start;flex-direction:column}.lower{grid-template-columns:1fr}.stats{width:100%}.stat{flex:1;min-width:0}.exceptions{grid-template-columns:1fr}}@media(max-width:600px){.wrap{padding:20px 14px 32px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{padding:10px}.stat b{font-size:22px}.section-head{align-items:flex-start;flex-direction:column}section{padding:15px}.exceptions{gap:8px}.lead{font-size:13px}}
+.view-switch{display:flex;gap:8px;margin:-5px 0 18px}.view-switch a{color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:9px 13px;border-radius:9px;font-weight:700;font-size:12px}.view-switch a.active{color:#fff;background:var(--ink);border-color:var(--ink)}
+/* Anniversary references come only from dated anniversary rows in the supplied data. */
+.milestones{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}.milestone{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--soft);border-radius:8px;font-size:11px}.milestone b{color:var(--coral)}.milestone span{color:var(--muted)}.annomark{position:absolute;top:0;bottom:0;border-left:1px dashed #a7b6ca;z-index:3;pointer-events:none}.annomark b{position:absolute;top:5px;left:4px;white-space:nowrap;font-size:10px;color:#53627b;background:#fff;padding:2px 4px;border-radius:4px}.barcol{z-index:1}
+/* Keep wide data grids inside their own scroll regions on small screens. */
+.lower>section{min-width:0}
+.chart.monthly{min-width:2300px}.controlRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px;padding:10px 12px;background:var(--soft);border-radius:10px}.controlRow strong{font-size:12px}.controlRow button{font:inherit;font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer}.controlRow button.on,.controlRow .download{color:#fff;background:var(--ink);border-color:var(--ink)}.annomark.event-fes{border-color:#f06d65}.annomark.event-live{border-color:#25a7a0}.annomark.event-anime{border-color:#8b66db}.annomark.event-fes b{color:#d95750}.annomark.event-live b{color:#168b86}.annomark.event-anime b{color:#7047b8}.annomark.level-1 b{top:21px}.annomark.level-2 b{top:38px}
+.annomark b{font-size:9px;padding:2px 4px;box-shadow:0 0 0 1px rgba(220,228,240,.7);z-index:3}.annomark.event-fes b{top:22px}.annomark.event-live b{top:40px}.annomark.event-anime b{top:58px}.annomark.event-story b{top:76px}.annomark.event-game b{top:94px}.annomark.event-story{border-color:#3877c8}.annomark.event-game{border-color:#db8c27}.annomark.event-story b{color:#2864ae}.annomark.event-game b{color:#bd7115}.eventGuide{display:flex;gap:10px;flex-wrap:wrap;margin:-5px 0 12px;color:var(--muted);font-size:10px}.eventGuide span{display:flex;align-items:center;gap:5px}.eventGuide i{width:8px;height:8px;border-radius:50%}
+</style></head><body><main class="wrap">
+<header><div><h1 id="pageTitle">콜라보 아틀라스</h1><p class="lead" id="pageLead"></p></div><div class="stats"><div class="stat" style="--c:var(--coral)"><b id="dated">0</b><span>날짜 확인</span></div><div class="stat" style="--c:var(--violet)"><b id="unknown">0</b><span>날짜 미상</span></div><div class="stat" style="--c:var(--gold)"><b id="ongoing">0</b><span>상시 진행</span></div></div></header>
+<nav class="view-switch"><a id="offlineLink" href="?view=offline">오프라인·공공</a><a id="retailLink" href="?view=retail">리테일/F&amp;B</a></nav>
+<section><div class="section-head"><div><h2>분기별 오프라인·공공 콜라보 추이</h2><p>두 분류를 하나로 합산, 발표/시작일 기준</p></div><div class="legend" id="legend"></div></div><div class="chart-scroll"><div class="chart"><div class="yaxis" id="yaxis"></div><div class="plot" id="plot"></div><div class="xlabels" id="xlabels"></div></div></div><div class="milestones" id="milestones"></div></section>
+<div class="lower"><section><div class="section-head"><div><h2>연도별 활동 무대</h2><p>오프라인·공공 콜라보의 업종별 분포</p></div></div><div class="heat-wrap"><div class="heat" id="heat"></div></div><div class="scale"><span>적음</span><b></b><span>많음</span></div></section>
+<section><div class="section-head"><div><h2>전체 콜라보 타임라인</h2><p id="timelineCount">날짜가 확인된 모든 사례</p></div><div class="filters" id="yearFilters"></div></div><div class="timeline" id="timeline"></div></section></div>
+<section id="exceptionSection"><div class="section-head"><div><h2>날짜 미상</h2><p>시계열과 히트맵 수치에서 제외</p></div></div><div class="exceptions" id="exceptions"></div></section>
+<div class="foot"><span id="totalFoot"></span><span>단위: 건 | 집계 범위: 2021 Q1–2026 Q3</span></div></main><div class="tooltip" id="tip"></div>
+<script>
+const D=`도쿄 마루이 1차|리테일/F&B|2021.03.19|완구(에어건)
+하츠네 미쿠 VOCALOID|타 IP/미디어 크로스오버|2021.10.18|음악(타 IP)
+일본우편 1차|공공기관|2021.12.30|공공기관(우편)
+도쿄 마루이 2차|리테일/F&B|2022.01.21|완구(에어건)
+돈키호테 1주년|리테일/F&B|2022.02.19|유통(할인점)
+Re버스 for you|타 IP/미디어 크로스오버|2022.04.22|게임(TCG)
+뉴에라 1.5주년|리테일/F&B|2022.07.16|패션(모자)
+도쿄 마루이 3차|리테일/F&B|2022.09.28|완구(에어건)
+블루아카×아키하바라 콜라보|오프라인 체험/공간형|2023.02.01|행사(지역상점가)
+돈키호테 2주년|리테일/F&B|2023.05.13|유통(할인점)
+타니타 1차|리테일/F&B|2023.07.23|전자(헬스기기)
+온쿄 1차|리테일/F&B|2023.09.20|전자(오디오)
+로손 1차|리테일/F&B|2023.09.26|유통(편의점)
+어떤 과학의 초전자포 T|타 IP/미디어 크로스오버|2023.10.20|애니메이션(타 IP)
+마이루틴 1차|리테일/F&B|2023.10.21|헬스푸드
+WIXOSS 1차|타 IP/미디어 크로스오버|2023.11.03|완구(카드게임)
+반다이 1편|리테일/F&B|2023.11.27|완구(식완)
+JOYSOUND|오프라인 체험/공간형|2023.12.05|가라오케
+애니메이트 카페|오프라인 체험/공간형|2024.01.24|서브컬처 유통
+로손 2차|리테일/F&B|2024.01.30|유통(편의점)
+이치방쿠지 1차|리테일/F&B|2024.01.31|피규어·굿즈
+아트레 아키하바라 1차|리테일/F&B|2024.02.01|유통(백화점)
+가라오케 마네키네코 1차|오프라인 체험/공간형|2024.02.01|가라오케
+바이스 슈발츠|리테일/F&B|2024.02.09|완구(카드게임)
+Wonder Links 1차|리테일/F&B|2024.03.25|식음료(홍차)
+작혼|타 IP/미디어 크로스오버|2024.04.01|게임(모바일)
+ROUND1 1차|오프라인 체험/공간형|2024.04.10|오락시설
+블루아카×교토 콜라보 1차|오프라인 체험/공간형|2024.04.16|행사(지역관광)
+반다이 2편|리테일/F&B|2024.04.22|완구(식완)
+Anideal 향수 1차|리테일/F&B|2024.04.23|뷰티(향수)
+피자헛|리테일/F&B|2024.05.13|식음료(피자)
+뉴에라 2.5주년|리테일/F&B|2024.05.24|패션(모자)
+DyDo|리테일/F&B|2024.06.03|식음료(음료)
+Anideal 손목시계 1차|리테일/F&B|2024.07.22|뷰티·잡화(시계)
+ag(final) 1차|리테일/F&B|2024.07.22|전자(오디오)
+월드 오브 워쉽 1차|타 IP/미디어 크로스오버|2024.07.28|게임
+츠타야 1차|리테일/F&B|2024.08.02|유통(서점)
+마츠리노유|오프라인 체험/공간형|2024.08.06|레저(온천)
+조조타운 1차|리테일/F&B|2024.08.16|유통·패션
+스마일 베이스 카페|오프라인 체험/공간형|2024.08.24|카페
+로손 3차|리테일/F&B|2024.08.27|유통(편의점)
+굿스마일 컴퍼니 1차|리테일/F&B|2024.08.30|완구(피규어)
+AnimaxCafe+|오프라인 체험/공간형|2024.09.13|카페
+블루아카×교토 콜라보 2차|오프라인 체험/공간형|2024.10.31|행사(지역관광)
+도데카민|리테일/F&B|2024.11.05|식음료(음료)
+고베 아리마 온천|오프라인 체험/공간형|2024.11.22|레저(온천)
+롯데 빅쿠리맨|리테일/F&B|2024.12.03|식음료(과자)
+로손 4차|리테일/F&B|2024.12.03|유통(편의점)
+DJMAX RESPECT V|타 IP/미디어 크로스오버|2024.12.11|게임
+Muse Dash|타 IP/미디어 크로스오버|2024.12.14|게임
+커튼 타마시|리테일/F&B|2024.12.22|홈리빙(커튼)
+마이루틴 2차|리테일/F&B|2025.01.19|헬스푸드
+도요수산(훼미리마트)|리테일/F&B|2025.01.21|식음료(면류)
+아트레 아키하바라 2차|리테일/F&B|2025.02.01|유통(백화점)
+반다이 3편|리테일/F&B|2025.02.10|완구(식완)
+이치방쿠지 2차|리테일/F&B|2025.02.15|피규어·굿즈
+Anideal 향수 2차|리테일/F&B|2025.04.21|뷰티(향수)
+WIXOSS 2차|타 IP/미디어 크로스오버|2025.04.26|완구(카드게임)
+타이토 스테이션|리테일/F&B|2025.05.17|오락실
+집사안경 eyemirror|리테일/F&B|2025.06.14|패션(안경)
+온쿄 2차|리테일/F&B|2025.06.24|전자(오디오)
+리스아니!|타 IP/미디어 크로스오버|2025.06.24|출판(잡지)
+게키츄마이(온게키·마이마이·츄니즘)|타 IP/미디어 크로스오버|2025.07.04|게임(아케이드)
+월드 오브 워쉽 2차|타 IP/미디어 크로스오버|2025.07.08|게임
+ag(final) 2차|리테일/F&B|2025.07.19|전자(오디오)
+Anideal 손목시계 2차|리테일/F&B|2025.07.22|뷰티·잡화(시계)
+슈퍼 그루피즈 1차|리테일/F&B|2025.07.22|패션(잡화)
+가라오케 마네키네코 2차|오프라인 체험/공간형|2025.07.24|가라오케
+산토리 TAG LIVE LABEL|리테일/F&B|2025.08.04|식음료(음료)
+로손 5차|리테일/F&B|2025.08.05|유통(편의점)
+카라테즈|리테일/F&B|2025.08.27|가라오케
+캐널시티 하카타|오프라인 체험/공간형|2025.08.28|유통(쇼핑몰)
+굿스마일 컴퍼니 2차|리테일/F&B|2025.08.29|완구(피규어)
+Anideal 향수 3차|리테일/F&B|2025.09.22|뷰티(향수)
+AVIOT|리테일/F&B|2025.10.21|전자(오디오)
+Wonder Links 2차|리테일/F&B|2025.10.22|식음료(홍차)
+마루이|오프라인 체험/공간형|2025.11.07|유통·패션
+스파월드|오프라인 체험/공간형|2025.11.20|레저(온천)
+Pulsar Gaming Gears|리테일/F&B|2025.11.21|전자(게이밍기어)
+Anideal 디퓨저|리테일/F&B|2025.12.22|뷰티(디퓨저)
+리큐엔 교토|리테일/F&B|2026.01.19|식음료(디저트)
+아트레 아키하바라 3차|리테일/F&B|2026.02.01|유통(백화점)
+KADOKAWA|오프라인 체험/공간형|2026.02.06|출판
+5주년 기념 전국 스탬프 랠리 1탄(아사쿠사)|오프라인 체험/공간형|2026.02.06|행사(지역관광)
+온쿄 3차|리테일/F&B|2026.02.14|전자(오디오)
+로손 6차|리테일/F&B|2026.02.24|유통(편의점)
+ROUND1 2차|오프라인 체험/공간형|2026.03.06|오락시설
+도부동물공원|오프라인 체험/공간형|2026.03.14|레저(동물원)
+타니타 2차|리테일/F&B|2026.04.20|전자(헬스기기)
+이치방쿠지 3차|리테일/F&B|2026.04.25|피규어·굿즈
+야키토리 오기야|리테일/F&B|2026.05.13|식음료(꿬치)
+슈퍼 그루피즈 2차|리테일/F&B|2026.05.18|패션(잡화)
+5주년 기념 전국 스탬프 랠리 2탄(나고야)|오프라인 체험/공간형|2026.05.22|행사(지역관광)
+AMICIS|리테일/F&B|2026.06.01|IT·게이밍기기
+쿠지비키도|리테일/F&B|2026.06.11|피규어·굿즈
+일본우편 2차|공공기관|2026.07.03|공공기관(우편)
+온천 센가와 유케무리노사토|오프라인 체험/공간형|2026.07.06|레저(온천)
+슈퍼 그루피즈 3차|리테일/F&B|2026.07.26|패션(잡화)
+final|리테일/F&B|2026.07.26|전자(오디오)
+J1리그|공공기관|2026.07.29|스포츠(공공기관)
+이타인도|리테일/F&B|2026.08.03|문구·잡화
+로손 7차|리테일/F&B|2026.08.04|유통(편의점)
+빅 카메라|리테일/F&B|2026.08.07|유통(가전양판점)
+조조타운 2차|리테일/F&B|2026.08.13|유통·패션
+츠타야 2차|리테일/F&B|2026.08.18|유통(서점)
+5주년 기념 전국 스탬프 랠리 3탄(오사카)|오프라인 체험/공간형|2026.09.11|행사(지역관광)
+JR 도카이|공공기관|2026.09.11|교통(공공기관)
+5주년 기념 전국 스탬프 랠리 4탄(가나자와)|오프라인 체험/공간형|미상|행사(지역관광)
+5주년 기념 전국 스탬프 랠리 5탄(하카타)|오프라인 체험/공간형|미상|행사(지역관광)
+애니메이트|리테일/F&B|상시 진행|서브컬처 유통`.trim().split('\n').map(x=>{let [name,cat,date,industry]=x.split('|');return{name,cat,date,industry}});
+const view=new URLSearchParams(location.search).get('view')==='retail'?'retail':'offline';
+const SOURCE_C={'오프라인 체험/공간형':'#ff7167','공공기관':'#f5aa17','리테일/F&B':'#318ce7'},viewLabel=view==='retail'?'리테일/F&B':'오프라인·공공',C={[viewLabel]:view==='retail'?'#318ce7':'#ff7167'},cats=[viewLabel];
+const focus=D.filter(x=>view==='retail'?x.cat==='리테일/F&B':(x.cat==='오프라인 체험/공간형'||x.cat==='공공기관')),dated=focus.filter(x=>/^\d{4}/.test(x.date));
+document.querySelector('#pageTitle').textContent=view==='retail'?'리테일/F&B 콜라보 아틀라스':'오프라인·공공 콜라보 아틀라스';document.querySelector('#pageLead').textContent=view==='retail'?'리테일과 F&B 콜라보가 언제, 어떤 업종과 상품으로 전개됐는지 보는 대시보드':'오프라인 체험과 공공기관 콜라보가 언제, 어디서, 어떤 방식으로 전개됐는지 보는 대시보드';document.querySelector(view==='retail'?'#retailLink':'#offlineLink').classList.add('active');document.querySelectorAll('section h2')[0].textContent=view==='retail'?'분기별 리테일/F&B 콜라보 추이':'분기별 오프라인·공공 콜라보 추이';document.querySelectorAll('section h2')[1].textContent=view==='retail'?'연도별 업종 구성':'연도별 활동 무대';
+document.querySelector('#dated').textContent=dated.length;document.querySelector('#unknown').textContent=focus.filter(x=>x.date==='미상').length;document.querySelector('#ongoing').textContent=focus.filter(x=>x.date==='상시 진행').length;document.querySelector('#totalFoot').textContent=`분석 대상 ${focus.length}건, 사용자 제공 데이터만 사용`;
+let active=new Set(cats), max=0;const qs=[];for(let y=2021;y<=2026;y++)for(let q=1;q<=4;q++){if(y===2026&&q===4)continue;qs.push({y,q,key:`${y} Q${q}`})}
+function renderChart(){const counts=qs.map(o=>{let a={'오프라인·공공':dated.filter(d=>+d.date.slice(0,4)===o.y&&Math.ceil(+d.date.slice(5,7)/3)===o.q).length};return a});max=Math.max(4,...counts.map(a=>cats.reduce((s,c)=>s+(active.has(c)?a[c]:0),0)));let top=Math.ceil(max/4)*4;document.querySelector('#yaxis').innerHTML=[top,top*.75,top*.5,top*.25,0].map(n=>`<span>${n}</span>`).join('');document.querySelector('#plot').innerHTML=counts.map((a,i)=>{let total=cats.reduce((s,c)=>s+(active.has(c)?a[c]:0),0),segs=cats.filter(c=>active.has(c)&&a[c]).map(c=>`<div class="seg" style="height:${a[c]/top*100}%;background:${C[c]}"></div>`).join('');return `<div class="barcol" data-i="${i}"><span class="total" style="bottom:calc(${total/top*100}% + 5px)">${total||''}</span><div class="bar" style="height:100%">${segs}</div></div>`}).join('');document.querySelector('#xlabels').innerHTML=qs.map(o=>`<div class="xlabel">${o.y}<br>Q${o.q}</div>`).join('');document.querySelectorAll('.barcol').forEach(el=>el.onmousemove=e=>{let i=+el.dataset.i,rows=dated.filter(d=>+d.date.slice(0,4)===qs[i].y&&Math.ceil(+d.date.slice(5,7)/3)===qs[i].q),html=`<b>${qs[i].key} · ${rows.length}건</b><br>`+rows.map(d=>d.name).join('<br>');tip(e,html)});document.querySelectorAll('.barcol').forEach(el=>el.onmouseleave=untip)}
+document.querySelector('#legend').innerHTML=cats.map(c=>`<button data-c="${c}"><i style="background:${C[c]}"></i>${c}</button>`).join('');document.querySelectorAll('#legend button').forEach(b=>b.onclick=()=>{active.has(b.dataset.c)?active.delete(b.dataset.c):active.add(b.dataset.c);b.classList.toggle('off');renderChart();renderMarks()});
+function group(s){if(/유통|서브컬처/.test(s))return'유통/리테일';if(/식음료|헬스푸드|카페/.test(s))return'식음료';if(/패션|뷰티/.test(s))return'패션/뷰티';if(/전자|IT/.test(s))return'전자/IT';if(/완구|피규어|문구/.test(s))return'완구/굿즈';if(/게임|음악|애니메이션|출판/.test(s))return'게임/미디어';if(/레저|가라오케|오락|행사/.test(s))return'레저/공간';if(/공공기관|교통|스포츠/.test(s))return'교통/공공';return'기타'}
+const groups=['유통/리테일','식음료','패션/뷰티','전자/IT','완구/굿즈','게임/미디어','레저/공간','교통/공공','기타'],years=[2021,2022,2023,2024,2025,2026],H={};groups.forEach(g=>H[g]={});dated.forEach(d=>{let g=group(d.industry),y=+d.date.slice(0,4);H[g][y]=(H[g][y]||0)+1});const hm=Math.max(...groups.flatMap(g=>years.map(y=>H[g][y]||0)));document.querySelector('#heat').innerHTML='<div></div>'+years.map(y=>`<div class="cell year">${y}</div>`).join('')+groups.map(g=>`<div class="cell lab">${g}</div>`+years.map(y=>{let v=H[g][y]||0,a=v/hm;return `<div class="cell value" data-tip="${g} · ${y}: ${v}건" style="background:rgba(35,118,220,${.06+a*.87});color:${a>.48?'white':'#10213c'}">${v}</div>`}).join('')).join('');document.querySelectorAll('.value').forEach(e=>{e.onmousemove=x=>tip(x,e.dataset.tip);e.onmouseleave=untip});
+const HOW={
+'일본우편 1차':'우표 세트와 클리어파일 상품',
+'블루아카×아키하바라 콜라보':'아키하바라 15개 매장 참여 암호 도전장 스탬프 랠리',
+'JOYSOUND':'트리니티 테마 음료 8종과 콜라보룸',
+'애니메이트 카페':'이케부쿠로·오사카 매장 카페와 굿즈',
+'가라오케 마네키네코 1차':'체험형 공간과 일러스트 전시, 굿즈',
+'ROUND1 1차':'대책위원회·흥신소68 테마 시설 콜라보',
+'블루아카×교토 콜라보 1차':'JR도카이 협력 지역 관광 스탬프 랠리',
+'마츠리노유':'백귀야행·온천개발부 테마 온천 굿즈',
+'스마일 베이스 카페':'콜라보 카페와 굿즈',
+'AnimaxCafe+':'RABBIT소대·발키리경찰학교 테마 카페와 굿즈',
+'블루아카×교토 콜라보 2차':'케이후쿠전철 협력 지역 관광 스탬프 랠리',
+'고베 아리마 온천':'온천 굿즈와 현장 이벤트',
+'가라오케 마네키네코 2차':'가라오케 굿즈',
+'캐널시티 하카타':'수수께끼 풀이 키트 판매',
+'마루이':'팝업스토어',
+'스파월드':'JR도카이 동시 진행 온천 굿즈와 이벤트',
+'KADOKAWA':'도쿄·오사카·방콕·홍대·미국 등 애니메이트 팝업스토어',
+'5주년 기념 전국 스탬프 랠리 1탄(아사쿠사)':'아사쿠사 스탬프 랠리, 한정 굿즈, 콜라보 카페',
+'ROUND1 2차':'오락시설 현장 상품',
+'도부동물공원':'동물원 현장 이벤트',
+'5주년 기념 전국 스탬프 랠리 2탄(나고야)':'나고야 전역 스탬프 랠리, 콜라보 음식과 한정 굿즈',
+'일본우편 2차':'우체국쇼핑 이로하 굿즈 판매',
+'온천 센가와 유케무리노사토':'온천 현장 이벤트',
+'J1리그':'J1리그 20개 팀 단독 제휴 프로모션',
+'5주년 기념 전국 스탬프 랠리 3탄(오사카)':'오사카 8개 장소 QR 스탬프, JR도카이·신칸센 연계',
+'JR 도카이':'나고야 관련 SD 일러스트 제휴 프로모션'};
+let selected='전체';function renderTL(){let a=dated.filter(d=>selected==='전체'||d.date.startsWith(selected));timeline.innerHTML=a.map(d=>`<div class="tlrow"><div class="date">${d.date}</div><div class="dot" style="--c:${SOURCE_C[d.cat]}"></div><div class="event"><b>${d.name}</b><span>${HOW[d.name]||`${d.industry} 협업`}<br>${d.cat} · ${d.industry}</span></div></div>`).join('');document.querySelector('#timelineCount').textContent=`날짜가 확인된 ${a.length}건`}
+yearFilters.innerHTML=['전체',...years].map(y=>`<button>${y}</button>`).join('');document.querySelectorAll('#yearFilters button').forEach(b=>b.onclick=()=>{selected=b.textContent;renderTL()});renderTL();
+const notes={'5주년 기념 전국 스탬프 랠리 4탄(가나자와)':'오사카 일정 전후로 상세 일정 순차 발표','5주년 기념 전국 스탬프 랠리 5탄(하카타)':'오사카 일정 전후로 상세 일정 순차 발표'};const undated=focus.filter(d=>!/^\d/.test(d.date));document.querySelector('#exceptions').innerHTML=undated.map(d=>`<div class="ex" style="--c:var(--violet)"><small>${d.date}</small><b>${d.name}</b><p>${notes[d.name]}<br>${d.cat} · ${d.industry}</p></div>`).join('');document.querySelector('#exceptionSection').style.display=undated.length?'block':'none';
+const milestones=[['1주년','2022.02.04'],['1.5주년','2022.08.04'],['2주년','2023.02.04'],['2.5주년','2023.08.04'],['3주년','2024.02.04'],['3.5주년','2024.08.04'],['4주년','2025.02.04'],['4.5주년','2025.08.04'],['5주년','2026.02.04']];document.querySelector('#milestones').innerHTML=milestones.map(m=>`<div class="milestone"><b>${m[0]}</b><span>${m[1]} · 기념일 기준</span></div>`).join('');
+function renderMarks(){milestones.forEach(m=>{let y=+m[1].slice(0,4),q=Math.ceil(+m[1].slice(5,7)/3),i=qs.findIndex(x=>x.y===y&&x.q===q);if(i>=0)document.querySelector('#plot').insertAdjacentHTML('beforeend',`<div class="annomark" style="left:${(i+.5)/qs.length*100}%"><b>${m[0]}</b></div>`)})}
+const tt=document.querySelector('#tip');function tip(e,h){tt.innerHTML=h;tt.style.left=e.clientX+'px';tt.style.top=e.clientY+'px';tt.style.opacity=1}function untip(){tt.style.opacity=0}renderChart();renderMarks();
+</script>
+<script>
+function renderSelectedChart(){const counts=qs.map(o=>dated.filter(d=>+d.date.slice(0,4)===o.y&&Math.ceil(+d.date.slice(5,7)/3)===o.q).length),top=Math.max(4,Math.ceil(Math.max(...counts)/4)*4);document.querySelector('#yaxis').innerHTML=[top,top*.75,top*.5,top*.25,0].map(n=>`<span>${n}</span>`).join('');document.querySelector('#plot').innerHTML=counts.map((total,i)=>`<div class="barcol" data-i="${i}"><span class="total" style="bottom:calc(${total/top*100}% + 5px)">${total||''}</span><div class="bar" style="height:100%">${active.has(viewLabel)&&total?`<div class="seg" style="height:${total/top*100}%;background:${C[viewLabel]}"></div>`:''}</div></div>`).join('');document.querySelector('#xlabels').innerHTML=qs.map(o=>`<div class="xlabel">${o.y}<br>Q${o.q}</div>`).join('');document.querySelectorAll('.barcol').forEach(el=>{el.onmousemove=e=>{let i=+el.dataset.i,rows=dated.filter(d=>+d.date.slice(0,4)===qs[i].y&&Math.ceil(+d.date.slice(5,7)/3)===qs[i].q);tip(e,`<b>${qs[i].key} · ${rows.length}건</b><br>`+rows.map(d=>d.name).join('<br>'))};el.onmouseleave=untip});renderMarks()}
+document.querySelectorAll('#legend button').forEach(b=>b.onclick=()=>{active.has(viewLabel)?active.delete(viewLabel):active.add(viewLabel);b.classList.toggle('off');renderSelectedChart()});renderSelectedChart();
+</script><script>
+let collabPeriod='quarterly';const collabEventGroups=window.ATLAS_EVENTS.monthly;const collabEvents=new Set(view==='retail'?Object.keys(collabEventGroups):['anniversary']);
+const controlRow=document.createElement('div');controlRow.className='controlRow';controlRow.innerHTML='<strong>표시 단위</strong><button data-cperiod="quarterly" class="on">분기별</button><button data-cperiod="monthly">월별</button><strong style="margin-left:8px">이벤트</strong>'+Object.entries(collabEventGroups).map(([k,v])=>`<button data-cevent="${k}" class="${collabEvents.has(k)?'on':''}">${v.label}</button>`).join('')+'<button class="download">그래프 PNG 저장</button>';document.querySelector('.chart-scroll').before(controlRow);
+function collabPeriods(){if(collabPeriod==='quarterly')return qs.map(o=>({label:`${o.y} Q${o.q}`,year:o.y,slot:o.q,rows:dated.filter(d=>+d.date.slice(0,4)===o.y&&Math.ceil(+d.date.slice(5,7)/3)===o.q)}));const a=[];for(let y=2021;y<=2026;y++)for(let m=1;m<=12;m++){if(y===2026&&m>9)break;a.push({label:`${y}.${String(m).padStart(2,'0')}`,year:y,slot:m,rows:dated.filter(d=>+d.date.slice(0,4)===y&&+d.date.slice(5,7)===m)})}return a}
+function renderCollabView(){const ps=collabPeriods(),vals=ps.map(p=>p.rows.length),top=Math.max(4,Math.ceil(Math.max(...vals)/4)*4),chart=document.querySelector('.chart');chart.classList.toggle('monthly',collabPeriod==='monthly');document.querySelector('section h2').textContent=`${collabPeriod==='monthly'?'월별':'분기별'} ${viewLabel} 콜라보 추이`;yaxis.innerHTML=[top,top*.75,top*.5,top*.25,0].map(n=>`<span>${n}</span>`).join('');plot.innerHTML=ps.map((p,i)=>`<div class="barcol" data-i="${i}"><span class="total" style="bottom:calc(${p.rows.length/top*100}% + 5px)">${p.rows.length||''}</span><div class="bar" style="height:100%">${active.has(viewLabel)&&p.rows.length?`<div class="seg" style="height:${p.rows.length/top*100}%;background:${C[viewLabel]}"></div>`:''}</div></div>`).join('');xlabels.innerHTML=ps.map(p=>`<div class="xlabel">${collabPeriod==='monthly'?(p.slot===1?p.year+'<br>':'<br>')+p.slot+'월':p.year+'<br>Q'+p.slot}</div>`).join('');let levels={};collabEvents.forEach(key=>{const g=collabEventGroups[key];g.monthly.forEach(e=>{let i;if(collabPeriod==='monthly')i=ps.findIndex(p=>p.year===e[1]&&p.slot===e[2]);else i=ps.findIndex(p=>p.year===e[1]&&p.slot===Math.ceil(e[2]/3));if(i<0)return;const level=levels[i]||0;levels[i]=level+1;plot.insertAdjacentHTML('beforeend',`<div class="annomark ${g.cls} level-${Math.min(level,2)}" style="left:${(i+.5)/ps.length*100}%"><b>${e[0]}</b></div>`)})});document.querySelectorAll('.barcol').forEach(el=>{el.onmousemove=e=>{const p=ps[+el.dataset.i];tip(e,`<b>${p.label} · ${p.rows.length}건</b><br>`+p.rows.map(r=>r.name).join('<br>'))};el.onmouseleave=untip})}
+document.querySelectorAll('[data-cperiod]').forEach(b=>b.onclick=()=>{collabPeriod=b.dataset.cperiod;document.querySelectorAll('[data-cperiod]').forEach(x=>x.classList.toggle('on',x===b));renderCollabView()});document.querySelectorAll('[data-cevent]').forEach(b=>b.onclick=()=>{collabEvents.has(b.dataset.cevent)?collabEvents.delete(b.dataset.cevent):collabEvents.add(b.dataset.cevent);b.classList.toggle('on');renderCollabView()});document.querySelectorAll('#legend button').forEach(b=>b.onclick=()=>{active.has(viewLabel)?active.delete(viewLabel):active.add(viewLabel);b.classList.toggle('off');renderCollabView()});
+document.querySelector('.controlRow .download').onclick=()=>{const ps=collabPeriods(),W=collabPeriod==='monthly'?2800:1800,H=820,canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;const c=canvas.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,W,H);c.fillStyle='#12213d';c.font='700 36px sans-serif';c.fillText(`${collabPeriod==='monthly'?'월별':'분기별'} ${viewLabel} 콜라보 추이`,60,55);const left=75,right=35,top=125,bottom=100,pw=W-left-right,ph=H-top-bottom,vals=ps.map(p=>p.rows.length),max=Math.max(4,Math.ceil(Math.max(...vals)/4)*4);c.strokeStyle='#dce4f0';for(let i=0;i<=4;i++){const yy=top+ph*i/4;c.beginPath();c.moveTo(left,yy);c.lineTo(W-right,yy);c.stroke();c.fillStyle='#647089';c.font='14px sans-serif';c.textAlign='right';c.fillText(String(max-max*i/4),left-10,yy+4)}const bw=pw/ps.length*.65;ps.forEach((p,i)=>{const x=left+pw*(i+.5)/ps.length-bw/2,h=p.rows.length/max*ph;c.fillStyle=C[viewLabel];c.fillRect(x,top+ph-h,bw,h);if(p.rows.length){c.fillStyle='#12213d';c.textAlign='center';c.font='700 12px sans-serif';c.fillText(String(p.rows.length),x+bw/2,top+ph-h-6)}c.save();c.translate(x+bw/2,H-55);c.rotate(-Math.PI/3);c.fillStyle='#647089';c.font='12px sans-serif';c.textAlign='right';c.fillText(p.label,0,0);c.restore()});const a=document.createElement('a');a.download=`blue-archive-${view}-${collabPeriod}-chart.png`;a.href=canvas.toDataURL('image/png');a.click()};renderCollabView();
+</script><script>
+collabEventGroups.fes.monthly.forEach((e,i)=>e[0]=`${i+3}주년 FES`);collabEventGroups.live.monthly[1][0]='교토 SP';collabEventGroups.live.monthly[2][0]='3.5 공개';collabEventGroups.live.monthly[3][0]='Summer SP';collabEventGroups.live.monthly[4][0]='4.5 공개';const eventGuide=document.createElement('div');eventGuide.className='eventGuide';eventGuide.innerHTML='<span><i style="background:#9aa9bd"></i>주년·반주년</span><span><i style="background:#855cc7"></i>애니·미디어</span><span><i style="background:#f06d65"></i>주년 FES</span><span><i style="background:#25a7a0"></i>공개방송</span><span><i style="background:#3877c8"></i>메인 스토리</span><span><i style="background:#db8c27"></i>대형 게임 이벤트</span>';controlRow.after(eventGuide);renderCollabView();
+</script></body></html>
