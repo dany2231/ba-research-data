@@ -28,7 +28,6 @@
   <header>
     <div class="brand">
       <h1>블루 아카이브 데이터 아틀라스</h1>
-      <p id="viewDescription">오프라인과 공공기관 콜라보 흐름</p>
     </div>
     <nav aria-label="대시보드 선택">
       <button type="button" data-view="offline">오프라인과 공공</button>
@@ -47,11 +46,10 @@
       goods:{src:'blue-archive-goods-trend.html',description:'Yostar와 Animate 굿즈 카테고리별 발매 흐름'},
       catalog:{src:'goods-catalog.html',description:'Yostar와 Animate 굿즈 통합 카탈로그'}
     };
-    const frame=document.querySelector('#dashboard'),description=document.querySelector('#viewDescription');
+    const frame=document.querySelector('#dashboard');
     function selectView(key,updateHash=true){
       if(!views[key])key='offline';
       document.querySelectorAll('[data-view]').forEach(button=>{const on=button.dataset.view===key;button.classList.toggle('active',on);button.setAttribute('aria-current',on?'page':'false')});
-      description.textContent=views[key].description;
       if(!frame.src.endsWith(views[key].src))frame.src=views[key].src;
       if(updateHash&&location.hash!==`#${key}`)history.replaceState(null,'',`#${key}`);
     }
