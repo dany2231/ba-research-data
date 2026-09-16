@@ -45,6 +45,35 @@ def price_number(value):
     return value if value and value > 0 else None
 
 
+def price_label(value):
+    return f"{value:,}엔(부가세 포함)" if value is not None else "가격 미정"
+
+
+def normalize_status(value):
+    value = text(value)
+    mapping = {
+        "販売終了": "판매 종료",
+        "この商品の販売は終了しました": "판매 종료",
+        "이 상품의 판매가 종료되었습니다": "판매 종료",
+        "판매중": "판매 중",
+        "カートに入れる": "판매 중",
+        "주문": "판매 중",
+        "予約受付中": "예약 접수 중",
+        "지금 품절 중입니다.": "품절",
+        "残りわずか": "재고 얼마 남지 않음",
+        "남은": "재고 얼마 남지 않음",
+        "在庫あり": "재고 있음",
+        "取り寄せ": "입고 예정",
+        "通常1～2日以内に入荷": "통상 1~2일 내 입고",
+        "통상 1~2일 이내에 입하": "통상 1~2일 내 입고",
+        "通常2～5日以内に入荷": "통상 2~5일 내 입고",
+        "통상 2~5일 이내에 입하": "통상 2~5일 내 입고",
+        "発売日以降出荷": "발매일 이후 출하",
+        "곧 판매 개시": "판매 예정",
+    }
+    return mapping.get(value, value or "미상")
+
+
 def month(value):
     match = re.search(r"(20\d{2})[./-](\d{1,2})", text(value))
     return f"{match.group(1)}-{int(match.group(2)):02d}" if match else ""
@@ -144,18 +173,19 @@ def main():
             else:
                 missing.append({"source": source, "id": product_id, "reason": "not found"})
 
+            numeric_price = price_number(price_text)
             products.append({
                 "source": source,
                 "id": product_id,
                 "name": name,
-                "priceText": price_text,
-                "price": price_number(price_text),
+                "priceText": price_label(numeric_price),
+                "price": numeric_price,
                 "start": start,
                 "end": end,
                 "category": category,
                 "url": url,
                 "event": event,
-                "status": status,
+                "status": normalize_status(status),
                 "month": month(start),
                 "figure": is_figure(name, category),
                 "image": f"catalog-images/{image_name}" if image_name else "",
