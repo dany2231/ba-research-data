@@ -636,6 +636,15 @@
             top: 94px
         }
 
+        .annomark.event-tour b {
+            top: 112px;
+            color: #0f7a5a
+        }
+
+        .annomark.event-tour {
+            border-color: #2fa77f
+        }
+
         .annomark.event-story {
             border-color: #3877c8
         }
@@ -742,7 +751,7 @@
             </div>
             <div class="exceptions" id="exceptions"></div>
         </section>
-        <div class="foot"><span id="totalFoot"></span><span>단위: 건 | 집계 범위: 2021 Q1–2026 Q3</span></div>
+        <div class="foot"><span id="totalFoot"></span><span>단위: 건 | 집계 범위: 2021 Q1–2026 Q4</span></div>
     </main>
     <div class="tooltip" id="tip"></div>
     <script>
@@ -843,6 +852,7 @@ AMICIS|리테일/F&B|2026.06.01|IT·게이밍기기
 쿠지비키도|리테일/F&B|2026.06.11|피규어·굿즈
 일본우편 2차|공공기관|2026.07.03|공공기관(우편)
 온천 센가와 유케무리노사토|오프라인 체험/공간형|2026.07.06|레저(온천)
+산세이도 서점 이케부쿠로 본점|오프라인 체험/공간형|2026.07.14|유통(서점)
 슈퍼 그루피즈 3차|리테일/F&B|2026.07.26|패션(잡화)
 final|리테일/F&B|2026.07.26|전자(오디오)
 J1리그|공공기관|2026.07.29|스포츠(공공기관)
@@ -853,6 +863,9 @@ J1리그|공공기관|2026.07.29|스포츠(공공기관)
 츠타야 2차|리테일/F&B|2026.08.18|유통(서점)
 5주년 기념 전국 스탬프 랠리 3탄(오사카)|오프라인 체험/공간형|2026.09.11|행사(지역관광)
 JR 도카이|공공기관|2026.09.11|교통(공공기관)
+기노쿠니야 서점 텐노지 미오|오프라인 체험/공간형|2026.09.19|유통(서점)
+산세이도 서점 나고야 본점|오프라인 체험/공간형|2026.11.13|유통(서점)
+이치방쿠지 4차|리테일/F&B|2026.12.26|피규어·굿즈
 5주년 기념 전국 스탬프 랠리 4탄(가나자와)|오프라인 체험/공간형|미상|행사(지역관광)
 5주년 기념 전국 스탬프 랠리 5탄(하카타)|오프라인 체험/공간형|미상|행사(지역관광)
 애니메이트|리테일/F&B|상시 진행|서브컬처 유통`.trim().split('\n').map(x => {let [name, cat, date, industry] = x.split('|'); return {name, cat, date, industry}});
@@ -861,7 +874,7 @@ JR 도카이|공공기관|2026.09.11|교통(공공기관)
         const focus = D.filter(x => view === 'retail' ? x.cat === '리테일/F&B' : (x.cat === '오프라인 체험/공간형' || x.cat === '공공기관')), dated = focus.filter(x => /^\d{4}/.test(x.date));
         document.querySelector('#pageTitle').textContent = view === 'retail' ? '리테일/F&B 콜라보 아틀라스' : '오프라인·공공 콜라보 아틀라스'; document.querySelector('#pageLead').textContent = view === 'retail' ? '리테일과 F&B 콜라보가 언제, 어떤 업종과 상품으로 전개됐는지 보는 대시보드' : '오프라인 체험과 공공기관 콜라보가 언제, 어디서, 어떤 방식으로 전개됐는지 보는 대시보드'; document.querySelector(view === 'retail' ? '#retailLink' : '#offlineLink').classList.add('active'); document.querySelectorAll('section h2')[0].textContent = view === 'retail' ? '분기별 리테일/F&B 콜라보 추이' : '분기별 오프라인·공공 콜라보 추이'; document.querySelectorAll('section h2')[1].textContent = view === 'retail' ? '연도별 업종 구성' : '연도별 활동 무대';
         document.querySelector('#dated').textContent = dated.length; document.querySelector('#totalFoot').textContent = `분석 대상 ${focus.length}건, 사용자 제공 데이터만 사용`;
-        let active = new Set(cats), max = 0; const qs = []; for (let y = 2021; y <= 2026; y++)for (let q = 1; q <= 4; q++) {if (y === 2026 && q === 4) continue; qs.push({y, q, key: `${y} Q${q}`})}
+        let active = new Set(cats), max = 0; const qs = []; for (let y = 2021; y <= 2026; y++)for (let q = 1; q <= 4; q++) {qs.push({y, q, key: `${y} Q${q}`})}
         function renderChart() {const counts = qs.map(o => {let a = {'오프라인·공공': dated.filter(d => +d.date.slice(0, 4) === o.y && Math.ceil(+d.date.slice(5, 7) / 3) === o.q).length}; return a}); max = Math.max(4, ...counts.map(a => cats.reduce((s, c) => s + (active.has(c) ? a[c] : 0), 0))); let top = Math.ceil(max / 4) * 4; document.querySelector('#yaxis').innerHTML = [top, top * .75, top * .5, top * .25, 0].map(n => `<span>${n}</span>`).join(''); document.querySelector('#plot').innerHTML = counts.map((a, i) => {let total = cats.reduce((s, c) => s + (active.has(c) ? a[c] : 0), 0), segs = cats.filter(c => active.has(c) && a[c]).map(c => `<div class="seg" style="height:${a[c] / top * 100}%;background:${C[c]}"></div>`).join(''); return `<div class="barcol" data-i="${i}"><span class="total" style="bottom:calc(${total / top * 100}% + 5px)">${total || ''}</span><div class="bar" style="height:100%">${segs}</div></div>`}).join(''); document.querySelector('#xlabels').innerHTML = qs.map(o => `<div class="xlabel">${o.y}<br>Q${o.q}</div>`).join(''); document.querySelectorAll('.barcol').forEach(el => el.onmousemove = e => {let i = +el.dataset.i, rows = dated.filter(d => +d.date.slice(0, 4) === qs[i].y && Math.ceil(+d.date.slice(5, 7) / 3) === qs[i].q), html = `<b>${qs[i].key} · ${rows.length}건</b><br>` + rows.map(d => d.name).join('<br>'); tip(e, html)}); document.querySelectorAll('.barcol').forEach(el => el.onmouseleave = untip)}
         document.querySelector('#legend').innerHTML = cats.map(c => `<button data-c="${c}"><i style="background:${C[c]}"></i>${c}</button>`).join(''); document.querySelectorAll('#legend button').forEach(b => b.onclick = () => {active.has(b.dataset.c) ? active.delete(b.dataset.c) : active.add(b.dataset.c); b.classList.toggle('off'); renderChart(); renderMarks()});
         function group(s) {if (/유통|서브컬처/.test(s)) return '유통/리테일'; if (/식음료|헬스푸드|카페/.test(s)) return '식음료'; if (/패션|뷰티/.test(s)) return '패션/뷰티'; if (/전자|IT/.test(s)) return '전자/IT'; if (/완구|피규어|문구/.test(s)) return '완구/굿즈'; if (/게임|음악|애니메이션|출판/.test(s)) return '게임/미디어'; if (/레저|가라오케|오락|행사/.test(s)) return '레저/공간'; if (/공공기관|교통|스포츠/.test(s)) return '교통/공공'; return '기타'}
@@ -890,9 +903,13 @@ JR 도카이|공공기관|2026.09.11|교통(공공기관)
             '5주년 기념 전국 스탬프 랠리 2탄(나고야)': '나고야 전역 스탬프 랠리, 콜라보 음식과 한정 굿즈',
             '일본우편 2차': '우체국쇼핑 이로하 굿즈 판매',
             '온천 센가와 유케무리노사토': '온천 현장 이벤트',
-            'J1리그': 'J1리그 20개 팀 단독 제휴 프로모션',
-            '5주년 기념 전국 스탬프 랠리 3탄(오사카)': '오사카 8개 장소 QR 스탬프, JR도카이·신칸센 연계',
-            'JR 도카이': '나고야 관련 SD 일러스트 제휴 프로모션'
+            'J1리그': 'J1리그 20개 팀 단독 제휴 프로모션, 11.08 국립경기장 하이라이트 경기',
+            '5주년 기념 전국 스탬프 랠리 3탄(오사카)': '오사카 8개 장소 QR 스탬프, JR도카이·신칸센 연계 (~10.12)',
+            'JR 도카이': '나고야 관련 SD 일러스트 제휴 프로모션',
+            '기노쿠니야 서점 텐노지 미오': '오사카 팝업스토어 (~10.14), 신규 일러스트 굿즈와 특전',
+            '산세이도 서점 나고야 본점': '나고야 팝업스토어 (~11.30), 신규 일러스트 굿즈와 특전',
+            '산세이도 서점 이케부쿠로 본점': '이케부쿠로 팝업스토어 (~08.09), 신규 일러스트 굿즈와 특전',
+            '이치방쿠지 4차': '반다이 스피리츠 1/7 피규어 5종 라인업, 점포 판매 (순차 발매)'
         };
         let selected = '전체'; function renderTL() {let a = dated.filter(d => selected === '전체' || d.date.startsWith(selected)); timeline.innerHTML = a.map(d => `<div class="tlrow"><div class="date">${d.date}</div><div class="dot" style="--c:${SOURCE_C[d.cat]}"></div><div class="event"><b>${d.name}</b><span>${HOW[d.name] || `${d.industry} 협업`}<br>${d.cat} · ${d.industry}</span></div></div>`).join(''); document.querySelector('#timelineCount').textContent = `날짜가 확인된 ${a.length}건`}
         yearFilters.innerHTML = ['전체', ...years].map(y => `<button>${y}</button>`).join(''); document.querySelectorAll('#yearFilters button').forEach(b => b.onclick = () => {selected = b.textContent; renderTL()}); renderTL();
@@ -908,13 +925,13 @@ JR 도카이|공공기관|2026.09.11|교통(공공기관)
     <script>
         let collabPeriod = 'quarterly'; const collabEventGroups = window.ATLAS_EVENTS.monthly; const collabEvents = new Set(view === 'retail' ? Object.keys(collabEventGroups) : ['anniversary']);
         const controlRow = document.createElement('div'); controlRow.className = 'controlRow'; controlRow.innerHTML = '<strong>표시 단위</strong><button data-cperiod="quarterly" class="on">분기별</button><button data-cperiod="monthly">월별</button><strong style="margin-left:8px">이벤트</strong>' + Object.entries(collabEventGroups).map(([k, v]) => `<button data-cevent="${k}" class="${collabEvents.has(k) ? 'on' : ''}">${v.label}</button>`).join('') + '<button class="download">그래프 PNG 저장</button>'; document.querySelector('.chart-scroll').before(controlRow);
-        function collabPeriods() {if (collabPeriod === 'quarterly') return qs.map(o => ({label: `${o.y} Q${o.q}`, year: o.y, slot: o.q, rows: dated.filter(d => +d.date.slice(0, 4) === o.y && Math.ceil(+d.date.slice(5, 7) / 3) === o.q)})); const a = []; for (let y = 2021; y <= 2026; y++)for (let m = 1; m <= 12; m++) {if (y === 2026 && m > 9) break; a.push({label: `${y}.${String(m).padStart(2, '0')}`, year: y, slot: m, rows: dated.filter(d => +d.date.slice(0, 4) === y && +d.date.slice(5, 7) === m)})} return a}
+        function collabPeriods() {if (collabPeriod === 'quarterly') return qs.map(o => ({label: `${o.y} Q${o.q}`, year: o.y, slot: o.q, rows: dated.filter(d => +d.date.slice(0, 4) === o.y && Math.ceil(+d.date.slice(5, 7) / 3) === o.q)})); const a = []; for (let y = 2021; y <= 2026; y++)for (let m = 1; m <= 12; m++) {a.push({label: `${y}.${String(m).padStart(2, '0')}`, year: y, slot: m, rows: dated.filter(d => +d.date.slice(0, 4) === y && +d.date.slice(5, 7) === m)})} return a}
         function renderCollabView() {const ps = collabPeriods(), vals = ps.map(p => p.rows.length), top = Math.max(4, Math.ceil(Math.max(...vals) / 4) * 4), chart = document.querySelector('.chart'); chart.classList.toggle('monthly', collabPeriod === 'monthly'); document.querySelector('section h2').textContent = `${collabPeriod === 'monthly' ? '월별' : '분기별'} ${viewLabel} 콜라보 추이`; yaxis.innerHTML = [top, top * .75, top * .5, top * .25, 0].map(n => `<span>${n}</span>`).join(''); plot.innerHTML = ps.map((p, i) => `<div class="barcol" data-i="${i}"><span class="total" style="bottom:calc(${p.rows.length / top * 100}% + 5px)">${p.rows.length || ''}</span><div class="bar" style="height:100%">${active.has(viewLabel) && p.rows.length ? `<div class="seg" style="height:${p.rows.length / top * 100}%;background:${C[viewLabel]}"></div>` : ''}</div></div>`).join(''); xlabels.innerHTML = ps.map(p => `<div class="xlabel">${collabPeriod === 'monthly' ? (p.slot === 1 ? p.year + '<br>' : '<br>') + p.slot + '월' : p.year + '<br>Q' + p.slot}</div>`).join(''); let levels = {}; collabEvents.forEach(key => {const g = collabEventGroups[key]; g.monthly.forEach(e => {let i; if (collabPeriod === 'monthly') i = ps.findIndex(p => p.year === e[1] && p.slot === e[2]); else i = ps.findIndex(p => p.year === e[1] && p.slot === Math.ceil(e[2] / 3)); if (i < 0) return; const level = levels[i] || 0; levels[i] = level + 1; plot.insertAdjacentHTML('beforeend', `<div class="annomark ${g.cls} level-${Math.min(level, 2)}" style="left:${(i + .5) / ps.length * 100}%"><b>${e[0]}</b></div>`)})}); document.querySelectorAll('.barcol').forEach(el => {el.onmousemove = e => {const p = ps[+el.dataset.i]; tip(e, `<b>${p.label} · ${p.rows.length}건</b><br>` + p.rows.map(r => r.name).join('<br>'))}; el.onmouseleave = untip})}
         document.querySelectorAll('[data-cperiod]').forEach(b => b.onclick = () => {collabPeriod = b.dataset.cperiod; document.querySelectorAll('[data-cperiod]').forEach(x => x.classList.toggle('on', x === b)); renderCollabView()}); document.querySelectorAll('[data-cevent]').forEach(b => b.onclick = () => {collabEvents.has(b.dataset.cevent) ? collabEvents.delete(b.dataset.cevent) : collabEvents.add(b.dataset.cevent); b.classList.toggle('on'); renderCollabView()}); document.querySelectorAll('#legend button').forEach(b => b.onclick = () => {active.has(viewLabel) ? active.delete(viewLabel) : active.add(viewLabel); b.classList.toggle('off'); renderCollabView()});
         document.querySelector('.controlRow .download').onclick = () => {const ps = collabPeriods(), W = collabPeriod === 'monthly' ? 2800 : 1800, H = 820, canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H; const c = canvas.getContext('2d'); c.fillStyle = '#fff'; c.fillRect(0, 0, W, H); c.fillStyle = '#12213d'; c.font = '700 36px sans-serif'; c.fillText(`${collabPeriod === 'monthly' ? '월별' : '분기별'} ${viewLabel} 콜라보 추이`, 60, 55); const left = 75, right = 35, top = 125, bottom = 100, pw = W - left - right, ph = H - top - bottom, vals = ps.map(p => p.rows.length), max = Math.max(4, Math.ceil(Math.max(...vals) / 4) * 4); c.strokeStyle = '#dce4f0'; for (let i = 0; i <= 4; i++) {const yy = top + ph * i / 4; c.beginPath(); c.moveTo(left, yy); c.lineTo(W - right, yy); c.stroke(); c.fillStyle = '#647089'; c.font = '14px sans-serif'; c.textAlign = 'right'; c.fillText(String(max - max * i / 4), left - 10, yy + 4)} const bw = pw / ps.length * .65; ps.forEach((p, i) => {const x = left + pw * (i + .5) / ps.length - bw / 2, h = p.rows.length / max * ph; c.fillStyle = C[viewLabel]; c.fillRect(x, top + ph - h, bw, h); if (p.rows.length) {c.fillStyle = '#12213d'; c.textAlign = 'center'; c.font = '700 12px sans-serif'; c.fillText(String(p.rows.length), x + bw / 2, top + ph - h - 6)} c.save(); c.translate(x + bw / 2, H - 55); c.rotate(-Math.PI / 3); c.fillStyle = '#647089'; c.font = '12px sans-serif'; c.textAlign = 'right'; c.fillText(p.label, 0, 0); c.restore()}); const a = document.createElement('a'); a.download = `blue-archive-${view}-${collabPeriod}-chart.png`; a.href = canvas.toDataURL('image/png'); a.click()}; renderCollabView();
     </script>
     <script>
-        collabEventGroups.fes.monthly.forEach((e, i) => e[0] = `${i + 3}주년 FES`); collabEventGroups.live.monthly[1][0] = '교토 SP'; collabEventGroups.live.monthly[2][0] = '3.5 공개'; collabEventGroups.live.monthly[3][0] = 'Summer SP'; collabEventGroups.live.monthly[4][0] = '4.5 공개'; const eventGuide = document.createElement('div'); eventGuide.className = 'eventGuide'; eventGuide.innerHTML = '<span><i style="background:#9aa9bd"></i>주년·반주년</span><span><i style="background:#855cc7"></i>애니·미디어</span><span><i style="background:#f06d65"></i>주년 FES</span><span><i style="background:#25a7a0"></i>공개방송</span><span><i style="background:#3877c8"></i>메인 스토리</span><span><i style="background:#db8c27"></i>대형 게임 이벤트</span>'; controlRow.after(eventGuide); renderCollabView();
+        collabEventGroups.fes.monthly.forEach((e, i) => e[0] = `${i + 3}주년 FES`); collabEventGroups.live.monthly[1][0] = '교토 SP'; collabEventGroups.live.monthly[2][0] = '3.5 공개'; collabEventGroups.live.monthly[3][0] = 'Summer SP'; collabEventGroups.live.monthly[4][0] = '4.5 공개'; const eventGuide = document.createElement('div'); eventGuide.className = 'eventGuide'; eventGuide.innerHTML = '<span><i style="background:#9aa9bd"></i>주년·반주년</span><span><i style="background:#855cc7"></i>애니·미디어</span><span><i style="background:#f06d65"></i>주년 FES</span><span><i style="background:#25a7a0"></i>공개방송</span><span><i style="background:#3877c8"></i>메인 스토리</span><span><i style="background:#db8c27"></i>대형 게임 이벤트</span><span><i style="background:#2fa77f"></i>라이브 투어</span>'; controlRow.after(eventGuide); renderCollabView();
     </script>
 </body>
 

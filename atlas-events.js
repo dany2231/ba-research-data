@@ -5,7 +5,8 @@
     fes:{label:'블루아카 페스',cls:'event-fes',items:[['3주년 페스',2024,1],['4주년 페스',2025,1],['5주년 페스',2026,1]]},
     live:{label:'공개 생방송',cls:'event-live',items:[['가을 SP',2022,10],['교토 SP',2024,4],['3.5 공개',2024,7],['Summer SP',2025,6],['4.5 공개',2025,7]]},
     story:{label:'메인 스토리',cls:'event-story',items:[['Vol.2 2장',2022,11],['최종편 개막',2023,1],['최종편 3장',2023,2],['최종편 4장',2023,3],['Vol.4 2장',2023,6],['Vol.1 3장 P3',2024,6]]},
-    game:{label:'대형 게임 이벤트',cls:'event-game',items:[['F.SCT 공략전',2023,1],['A-H.A 점령전',2023,2],['Sheside outside',2024,7]]}
+    game:{label:'대형 게임 이벤트',cls:'event-game',items:[['F.SCT 공략전',2023,1],['A-H.A 점령전',2023,2],['Sheside outside',2024,7]]},
+    tour:{label:'라이브 투어',cls:'event-tour',items:[['DJ 투어 파이널',2026,10]]}
   };
   const monthly={},monthlyItems={},quarterly={};
   Object.entries(groups).forEach(([key,g])=>{monthly[key]={label:g.label,cls:g.cls,items:g.items,monthly:g.items};monthlyItems[key]=g.items;quarterly[key]={label:g.label,cls:g.cls,items:g.items.map(([name,year,month])=>[name,year,Math.ceil(month/3)])}});
