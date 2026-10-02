@@ -20,21 +20,11 @@
 
 업데이트 기준은 Excel 파일이 아니라 크롤러가 생성한 `progress.json`입니다.
 
-Yostar 원본:
+Yostar 크롤러 폴더(`yostar-crawl`)의 `progress.json`과 `images` 폴더를 사용합니다.
 
-`<LOCAL_PATH>`
+Animate 크롤러 폴더(`animate-crawl`)의 `progress.json`과 `images` 폴더를 사용합니다.
 
-Yostar 이미지:
-
-`<LOCAL_PATH>`
-
-Animate 원본:
-
-`<LOCAL_PATH>`
-
-Animate 이미지:
-
-`<LOCAL_PATH>`
+두 크롤러 폴더는 이 저장소에 포함되어 있지 않습니다. 실제 위치는 `update_catalog.py` 상단의 경로 설정에서 지정합니다.
 
 Yostar는 판매 시작일을 사용하고, Animate는 발매일을 사용합니다. 두 날짜의 의미가 다르므로 시계열 해석 때 구분해야 합니다.
 
@@ -43,7 +33,7 @@ Yostar는 판매 시작일을 사용하고, Animate는 발매일을 사용합니
 먼저 두 크롤러를 실행해 `progress.json`과 `images`를 최신 상태로 둡니다. 그 다음 프로젝트 폴더에서 아래 명령을 실행합니다.
 
 ```powershell
-& "<LOCAL_PATH>" update_catalog.py
+python update_catalog.py
 ```
 
 스크립트가 수행하는 작업은 다음과 같습니다.
