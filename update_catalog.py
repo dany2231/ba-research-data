@@ -11,8 +11,14 @@ from PIL import Image, ImageOps
 
 
 PROJECT = Path(__file__).resolve().parent
-YOSTAR = Path(r"<LOCAL_PATH>")
-ANIMATE = Path(r"<LOCAL_PATH>")
+
+# 로컬 경로는 저장소에 올리지 않는 local_config.json에서 읽습니다.
+# 키: yostar_dir, animate_dir, translator (모두 선택). 없으면 프로젝트 폴더의 상위 폴더를 기준으로 합니다.
+_CONFIG_FILE = PROJECT / "local_config.json"
+_CONFIG = json.loads(_CONFIG_FILE.read_text(encoding="utf-8")) if _CONFIG_FILE.exists() else {}
+YOSTAR = Path(_CONFIG.get("yostar_dir", PROJECT.parent / "yostar-crawl"))
+ANIMATE = Path(_CONFIG.get("animate_dir", PROJECT.parent / "animate-crawl"))
+TRANSLATOR = Path(_CONFIG["translator"]) if _CONFIG.get("translator") else None
 DATA_FILE = PROJECT / "catalog-data.js"
 IMAGE_DIR = PROJECT / "catalog-images"
 REPORT_FILE = PROJECT / "catalog-build-report.json"
@@ -212,9 +218,8 @@ def main():
     REPORT_FILE.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
-    translator = Path(r"<LOCAL_PATH>")
-    if translator.exists():
-        runpy.run_path(str(translator))
+    if TRANSLATOR and TRANSLATOR.exists():
+        runpy.run_path(str(TRANSLATOR))
 
 
 if __name__ == "__main__":

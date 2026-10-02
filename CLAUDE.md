@@ -17,17 +17,12 @@
 
 ## 갱신 절차
 
-1. 아래 두 파일의 수정일을 확인합니다.
-
-`<LOCAL_PATH>`
-
-`<LOCAL_PATH>`
-
+1. Yostar와 Animate 크롤러 폴더의 `progress.json` 수정일을 확인합니다. 실제 경로는 저장소에 올리지 않는 `CLAUDE.local.md`와 `local_config.json`에 있습니다.
 2. 각 크롤러의 images 폴더가 최신인지 확인합니다.
-3. 프로젝트 폴더에서 `update_catalog.py`를 실행합니다.
+3. 프로젝트 폴더에서 `update_catalog.py`를 실행합니다. Python 실행 파일 경로는 `CLAUDE.local.md`를 따릅니다.
 
 ```powershell
-& "<LOCAL_PATH>" update_catalog.py
+python update_catalog.py
 ```
 
 4. `catalog-build-report.json`을 확인합니다.
@@ -52,7 +47,7 @@
 
 피규어 판정은 상품명과 카테고리의 키워드를 사용합니다. 피규어 분류를 변경하면 피규어 페이지와 굿즈 페이지의 집계가 함께 달라집니다.
 
-현재 `update_catalog.py`는 번역 보조 파일을 이전 Codex 작업 폴더에서 참조합니다. 다른 PC에서 작업할 때는 해당 번역 로직을 프로젝트 안으로 옮기거나, 번역 호출 경로를 새 환경에 맞게 수정해야 합니다.
+`update_catalog.py`는 번역 보조 파일을 `local_config.json`의 `translator` 경로에서 읽습니다. 다른 PC에서 작업할 때는 해당 번역 로직을 프로젝트 안으로 옮기거나, `local_config.json`을 새 환경에 맞게 만들어야 합니다. 설정이 없으면 번역 단계는 건너뜁니다.
 
 새 이벤트를 추가할 때는 `atlas-events.js`의 기존 날짜 형식과 색상 체계를 유지합니다. 원본 데이터에 없는 이벤트 날짜를 만들지 않습니다.
 
