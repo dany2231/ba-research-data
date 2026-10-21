@@ -307,9 +307,10 @@
         .tlrow:before {
             content: "";
             position: absolute;
-            left: 80px;
-            top: 11px;
-            bottom: -2px;
+            /* 날짜 칸 75px + 간격 12px + 점 반지름 5px = 점 중심 */
+            left: 91.5px;
+            top: 15px;
+            bottom: -5px;
             width: 1px;
             background: #c9d6e8
         }
@@ -321,7 +322,8 @@
         .date {
             font-weight: 700;
             color: var(--blue);
-            font-size: 12px
+            font-size: 12px;
+            line-height: 20px
         }
 
         .dot {
@@ -329,12 +331,14 @@
             height: 10px;
             border-radius: 50%;
             background: var(--c);
-            margin-top: 3px;
+            margin-top: 5px;
             z-index: 1
         }
 
         .event b {
-            font-size: 13px
+            display: block;
+            font-size: 13px;
+            line-height: 20px
         }
 
         .event span {
