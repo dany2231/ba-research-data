@@ -932,7 +932,7 @@ JR 도카이|공공기관|2026.09.11|교통(공공기관)
     </script>
     <script>
         collabEventGroups.fes.monthly.forEach((e, i) => e[0] = `${i + 3}주년 FES`); collabEventGroups.live.monthly[1][0] = '교토 SP'; collabEventGroups.live.monthly[2][0] = '3.5 공개'; collabEventGroups.live.monthly[3][0] = 'Summer SP'; collabEventGroups.live.monthly[4][0] = '4.5 공개'; const eventGuide = document.createElement('div'); eventGuide.className = 'eventGuide'; eventGuide.innerHTML = '<span><i style="background:#9aa9bd"></i>주년·반주년</span><span><i style="background:#855cc7"></i>애니·미디어</span><span><i style="background:#f06d65"></i>주년 FES</span><span><i style="background:#25a7a0"></i>공개방송</span><span><i style="background:#3877c8"></i>메인 스토리</span><span><i style="background:#db8c27"></i>대형 게임 이벤트</span><span><i style="background:#2fa77f"></i>라이브 투어</span>'; controlRow.after(eventGuide); renderCollabView();
-        SensorTowerOverlay.mount({before: document.querySelector('.chart-scroll'), plot, keys: () => collabPeriod === 'monthly' ? Array.from({length: 72}, (_, i) => `${2021 + Math.floor(i / 12)}-${String(i % 12 + 1).padStart(2, '0')}`) : qs.map(o => `${o.y}-Q${o.q}`)});
+        SensorTowerOverlay.mount({before: document.querySelector('.chart-scroll'), plot, keys: () => collabPeriod === 'monthly' ? Array.from({length: 72}, (_, i) => `${2021 + Math.floor(i / 12)}-${String(i % 12 + 1).padStart(2, '0')}`) : qs.map(o => `${o.y}-Q${o.q}`), dailyMarks: () => dated.filter(d => /^\d{4}\.\d{2}\.\d{2}$/.test(d.date)).map(d => [d.date.replace(/\./g, '-'), d.name])});
     </script>
 </body>
 

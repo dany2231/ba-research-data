@@ -67,7 +67,7 @@ python update_catalog.py
 
 ## Sensor Tower 데이터
 
-`update_sensortower.py`가 Sensor Tower API에서 월별 매출(USD)과 다운로드 추정치를 받아 `sensortower-data.js`를 만듭니다. 토큰은 `local_config.json`의 `sensortower_token` 또는 환경변수 `SENSORTOWER_TOKEN`에서 읽으며, 브라우저 코드나 커밋에 넣지 않습니다.
+`update_sensortower.py`가 Sensor Tower API에서 매출(USD), 다운로드, DAU/MAU, 게임 매출 차트 순위 추정치를 받아 `sensortower-data.js`(월 단위)와 `sensortower-daily.js`(일 단위, 일 단위 보기를 열 때만 읽음)를 만듭니다. 기간을 묶을 때 매출과 다운로드는 합하고, DAU·MAU·순위는 평균합니다. 순위는 차트에 오른 날만 평균하며 진입 일수를 함께 저장합니다. 전 세계(WW) 순위는 없습니다. 토큰은 `local_config.json`의 `sensortower_token` 또는 환경변수 `SENSORTOWER_TOKEN`에서 읽으며, 브라우저 코드나 커밋에 넣지 않습니다.
 
 앱 ID는 `local_config.json`의 `sensortower_apps`(`{"ios": [...], "android": [...]}`)로 지정합니다. ID를 모르면 `update_sensortower.py --find "Blue Archive"`로 검색합니다. 차트의 앱 선택 버튼 이름은 `sensortower_app_labels`(`{"앱 ID": "일본 iOS"}`)에서 가져오며, 데이터는 앱별로 저장되어 차트에서 선택한 앱만 합산합니다. 국가는 `sensortower_countries`로 바꿀 수 있습니다.
 
