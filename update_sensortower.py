@@ -15,7 +15,7 @@ from pathlib import Path
 PROJECT = Path(__file__).resolve().parent
 
 # 토큰과 앱 ID는 저장소에 올리지 않는 local_config.json에서 읽습니다.
-# 키: sensortower_token(또는 환경변수 SENSORTOWER_TOKEN), sensortower_apps, sensortower_countries, sensortower_start
+# 키: sensortower_token(또는 환경변수 SENSORTOWER_TOKEN), sensortower_apps, sensortower_app_labels, sensortower_countries, sensortower_start
 _CONFIG_FILE = PROJECT / "local_config.json"
 _CONFIG = json.loads(_CONFIG_FILE.read_text(encoding="utf-8")) if _CONFIG_FILE.exists() else {}
 TOKEN = os.environ.get("SENSORTOWER_TOKEN") or _CONFIG.get("sensortower_token", "")
@@ -23,6 +23,8 @@ APPS = _CONFIG.get("sensortower_apps") or {
     "ios": [],
     "android": ["com.YostarJP.BlueArchive", "com.nexon.bluearchive"],
 }
+# 앱 ID별 화면 표시 이름. 없으면 앱 ID를 그대로 표시합니다.
+APP_LABELS = _CONFIG.get("sensortower_app_labels") or {}
 COUNTRIES = _CONFIG.get("sensortower_countries") or ["JP", "KR", "US", "WW"]
 START = _CONFIG.get("sensortower_start", "2021-01-01")
 API = "https://api.sensortower.com/v1"
@@ -71,8 +73,9 @@ def number(row: dict, *keys):
 def fetch():
     end = last_full_month_end(date.today())
     start = date.fromisoformat(START)
-    # monthly[국가][YYYY-MM][플랫폼] = {"revenue": USD, "downloads": 건}
+    # monthly[국가][YYYY-MM][앱 ID] = {"revenue": USD, "downloads": 건}
     monthly = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: {"revenue": 0.0, "downloads": 0})))
+    app_os = {str(app_id): os_name for os_name, ids in APPS.items() for app_id in ids}
     errors = []
 
     for os_name, app_ids in APPS.items():
@@ -101,7 +104,12 @@ def fetch():
                     else:
                         revenue = number(row, "r", "revenue")
                         downloads = number(row, "u", "units")
-                    cell = monthly[country][key][os_name]
+                    # 여러 앱을 한 번에 요청하므로 행의 aid로 앱을 구분합니다.
+                    app_id = str(row.get("aid") or row.get("app_id") or "")
+                    if app_id not in app_os:
+                        errors.append(f"{os_name} {country} {key}: 알 수 없는 앱 ID {app_id!r}")
+                        continue
+                    cell = monthly[country][key][app_id]
                     # 매출은 센트 단위로 내려옵니다.
                     cell["revenue"] += revenue / 100
                     cell["downloads"] += downloads
@@ -110,11 +118,16 @@ def fetch():
     for country, months in monthly.items():
         series[country] = {}
         for key in sorted(months):
-            platforms = months[key]
+            apps = months[key]
+            platforms = defaultdict(lambda: {"revenue": 0.0, "downloads": 0})
+            for app_id, a in apps.items():
+                platforms[app_os[app_id]]["revenue"] += a["revenue"]
+                platforms[app_os[app_id]]["downloads"] += a["downloads"]
             series[country][key] = {
-                "revenue": round(sum(p["revenue"] for p in platforms.values())),
-                "downloads": sum(p["downloads"] for p in platforms.values()),
+                "revenue": round(sum(a["revenue"] for a in apps.values())),
+                "downloads": sum(a["downloads"] for a in apps.values()),
                 "platforms": {name: {"revenue": round(p["revenue"]), "downloads": p["downloads"]} for name, p in platforms.items()},
+                "apps": {app_id: {"revenue": round(a["revenue"]), "downloads": a["downloads"]} for app_id, a in apps.items()},
             }
 
     data = {
@@ -122,6 +135,7 @@ def fetch():
         "fetchedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "range": [start.isoformat()[:7], end.isoformat()[:7]],
         "apps": APPS,
+        "appInfo": [{"id": app_id, "os": os_name, "label": APP_LABELS.get(app_id, app_id)} for app_id, os_name in app_os.items()],
         "countries": {c: COUNTRY_LABELS.get(c, c) for c in COUNTRIES if c in series},
         "monthly": series,
     }

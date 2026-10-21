@@ -69,7 +69,7 @@ python update_catalog.py
 
 `update_sensortower.py`가 Sensor Tower API에서 월별 매출(USD)과 다운로드 추정치를 받아 `sensortower-data.js`를 만듭니다. 토큰은 `local_config.json`의 `sensortower_token` 또는 환경변수 `SENSORTOWER_TOKEN`에서 읽으며, 브라우저 코드나 커밋에 넣지 않습니다.
 
-앱 ID는 `local_config.json`의 `sensortower_apps`(`{"ios": [...], "android": [...]}`)로 지정합니다. ID를 모르면 `update_sensortower.py --find "Blue Archive"`로 검색합니다. 국가는 `sensortower_countries`로 바꿀 수 있습니다.
+앱 ID는 `local_config.json`의 `sensortower_apps`(`{"ios": [...], "android": [...]}`)로 지정합니다. ID를 모르면 `update_sensortower.py --find "Blue Archive"`로 검색합니다. 차트의 앱 선택 버튼 이름은 `sensortower_app_labels`(`{"앱 ID": "일본 iOS"}`)에서 가져오며, 데이터는 앱별로 저장되어 차트에서 선택한 앱만 합산합니다. 국가는 `sensortower_countries`로 바꿀 수 있습니다.
 
 `sensortower-data.js`는 저장소에 커밋되어 공개 사이트에도 표시됩니다. 파일이 없으면 `sensortower-overlay.js`는 아무것도 표시하지 않습니다. 오버레이는 굿즈 추이, 피규어, 콜라보(오프라인·공공, 리테일/F&B) 페이지에 있습니다.
 
