@@ -10,7 +10,7 @@
   document.head.insertAdjacentHTML('beforeend',`<style>
 .stSwitch{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 14px;padding:11px 12px;background:#fff6ef;border-radius:10px}.stSwitch strong{font-size:12px;margin-right:3px}.stSwitch button{font:inherit;font-size:11px;color:#647089;background:#fff;border:1px solid #dce4f0;border-radius:8px;padding:7px 10px;cursor:pointer}.stSwitch button.on{color:#fff;background:#12213d;border-color:#12213d}.stSwitch .sep{width:1px;height:20px;background:#e3d6cc;margin:0 4px}.stSwitch small{color:#8a7a6d;font-size:10px;margin-left:auto}
 .stLayer{position:absolute;inset:0;pointer-events:none;z-index:4}.stLayer svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.stDot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;border:2px solid #fff;pointer-events:auto;cursor:default}.stDot.partial{background:#fff!important;border-color:currentColor}.stAxis{position:absolute;right:-46px;top:0;bottom:0;width:42px;display:flex;flex-direction:column;justify-content:space-between;font-size:10px;font-weight:700}
-.scroll:has(.stLayer) .chart{grid-template-columns:38px 1fr 48px}
+.chart:has(.stLayer){padding-right:48px}
 </style>`);
   // 키는 'YYYY-MM' 또는 'YYYY-Qn'입니다. 분기는 원본에 있는 월만 합산하고, 빠진 월이 있으면 부분 집계로 표시합니다.
   function value(key){const months=data.monthly[state.country];let ms=[key];const q=key.match(/^(\d{4})-Q([1-4])$/);if(q)ms=[1,2,3].map(i=>`${q[1]}-${String((q[2]-1)*3+i).padStart(2,'0')}`);const found=ms.filter(m=>months[m]);if(!found.length)return null;return{v:found.reduce((s,m)=>s+months[m][state.metric],0),partial:found.length<ms.length,months:found.map(m=>months[m])}}
